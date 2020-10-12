@@ -1,0 +1,30 @@
+{
+  "name": "aave_simulation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && node dist/index.js",
+    "clean": "rm -r ./db/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/damarnez/aave_simulation.git"
+  },
+  "author": "damarnez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/damarnez/aave_simulation/issues"
+  },
+  "homepage": "https://gitlab.com/damarnez/aave_simulation#readme",
+  "dependencies": {
+    "ethers": "^5.0.17",
+    "ganache-cli": "^6.12.0"
+  },
+  "devDependencies": {
+    "tslint": "^5.12.1",
+    "typechain": "^3.0.0",
+    "typescript": "^3.3.3"
+  }
+}
