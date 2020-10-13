@@ -4,9 +4,11 @@ import ganache from "ganache-cli";
 
 import { LendingPoolFactory } from "./types/LendingPoolFactory";
 import { LendingPool } from "./types/LendingPool";
+import { ATokenFactory } from "./types/ATokenFactory";
+import { AToken } from "./types/AToken";
 import { Erc20Factory } from "./types/Erc20Factory";
 import { Erc20 } from "./types/Erc20";
-import { aTokens, AaveContracts } from "./utils/constants";
+import { aTokens, Tokens, AaveContracts } from "./utils/constants";
 
 const wait = () =>
   new Promise((resolve) => {
@@ -43,10 +45,7 @@ const connect = async () => {
     const signer02 = provider.getSigner(0);
 
     await wait();
-    const lpContract: LendingPool = await LendingPoolFactory.connect(
-      AaveContracts.LeendingPool, // LENDING POOL
-      signer01
-    );
+
     await wait();
     const ethBalance01 = await signer01.getBalance();
     const ethBalance02 = await signer02.getBalance();
@@ -59,7 +58,7 @@ const connect = async () => {
     );
 
     // Factory ADAI from Owner
-    const aDAIContract: Erc20 = Erc20Factory.connect(aTokens.DAI, signer01);
+    const aDAIContract: AToken = ATokenFactory.connect(aTokens.DAI, signer01);
 
     // GET addresses
     const addressSigner01 = await signer01.getAddress();
@@ -83,21 +82,83 @@ const connect = async () => {
     //   addressSigner02
     // );
     // console.log("ALLOWANCE : ", allowance.toString());
-    const transferAmount = "1";
-    console.log("TRANSFER: ", transferAmount);
+
+    console.log("TRANSFER: ", balanceBefore01);
 
     await wait();
     console.log(
-      `TransferFrom: ${addressSigner01} to ${addressSigner02} value ${transferAmount}`
+      `TransferFrom: ${addressSigner01} to ${addressSigner02} value ${balanceBefore01.toString()}`
     );
-    const resp2 = await aDAIContract.transfer(addressSigner02, transferAmount);
+    const resp2 = await aDAIContract.transfer(addressSigner02, balanceBefore01);
     console.log("TRANSFER DONE!", resp2);
     await wait();
     const balanceAfter01 = await aDAIContract.balanceOf(addressSigner01);
     const balanceAfter02 = await aDAIContract.balanceOf(addressSigner02);
     console.log("USER01 - BALANCE UPDATED", balanceAfter01.toString());
     console.log("USER02 - BALANCE UPDATED", balanceAfter02.toString());
+    // REDEEM
+    const aDAIContractUser02: AToken = ATokenFactory.connect(
+      aTokens.DAI,
+      signer02
+    );
+    const resp = await aDAIContractUser02.redeem(balanceAfter02);
+    console.log("REDEEM ", resp);
+    const USDCContractu01: Erc20 = Erc20Factory.connect(Tokens.USDC, signer01);
+    const usdcAmount = await USDCContractu01.balanceOf(addressSigner01);
+    console.log("USDC ---> ", usdcAmount.toString());
+    await USDCContractu01.transfer(addressSigner02, usdcAmount);
 
+    const DAIContractu02: Erc20 = Erc20Factory.connect(Tokens.DAI, signer02);
+    const balance = await DAIContractu02.balanceOf(addressSigner02);
+    console.log("USER02 - BALANCE DAI ", balance.toString());
+    await wait();
+    // APPROVE
+
+    const allowance = await DAIContractu02.allowance(
+      addressSigner02,
+      AaveContracts.LendingPool
+    );
+    console.log("ALLOWANCE : ", allowance.toString());
+    // DEPOSIT AGAIN
+    const lpContractu02: LendingPool = await LendingPoolFactory.connect(
+      AaveContracts.LendingPool, // LENDING POOL
+      signer02
+    );
+
+    // await DAIContractu02.approve(
+    //   lpContractu02.address,
+    //   ethers.constants.MaxUint256
+    // );
+
+    await DAIContractu02.approve(
+      AaveContracts.LendingPoolCore,
+      ethers.constants.MaxUint256
+    );
+    const interestRateMode = 1;
+    const referralCode = "0";
+    const useAsCollateral = true;
+    console.log("- DEPOSIT AGAIN - ");
+
+    const deposit = await lpContractu02.deposit(
+      Tokens.DAI,
+      balance,
+      referralCode
+    );
+    console.log("DEPOSIT : ", deposit);
+    const res = await lpContractu02.setUserUseReserveAsCollateral(
+      Tokens.DAI,
+      useAsCollateral
+    );
+    console.log("USE AS COLATERAL : ", res);
+    // Find another stable coin
+    const borrow = await lpContractu02.borrow(
+      Tokens.USDC,
+      1000,
+      interestRateMode,
+      referralCode
+    );
+
+    console.log("BORROW : ", borrow);
     // const res = await lpContract.setUserUseReserveAsCollateral(
     //   "0x6B175474E89094C44Da98b954EedeAC495271d0F",
     //   useAsCollateral
