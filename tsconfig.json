@@ -12,5 +12,5 @@
     "rootDir": "src"
   },
   "include": ["src/**/*"],
-  "lib": ["es2015"]
+  "lib": ["es2020"]
 }

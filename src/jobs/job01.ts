@@ -110,11 +110,10 @@ class Job01 extends Job {
       [Tokens.DAI],
       ["0x0000000000000000000000000000000000000000"]
     );
-    // GET PRICE DAI
 
     const sybilSigner = provider.getSigner(AaveContracts.Sybil);
     // UPDATE THE PRICE ORACLE
-    // TODO: I don't found the contract of this oracle deployed. Thats why I use the abi to load the contract.
+    // TODO: I don't found the contract of this oracle deployed. Thats why I use the abi to load the smartcontract.
     const contractAaveOracle = new ethers.Contract(
       AaveContracts.AaveOracleFallback,
       abiOracle,

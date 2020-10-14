@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --resolveJsonModule",
+    "build": "tsc",
     "start": "npm run clean && npm run build && env-cmd --no-override .env node dist/index.js",
     "clean": "rm -rf ./db/* && rm -rf ./dist"
   },
@@ -24,7 +24,6 @@
     "ethers": "^5.0.17",
     "ganache-cli": "^6.12.0",
     "microjob": "^0.7.0",
-    "web3": "^1.3.0",
     "worker-farm": "^1.7.0"
   },
   "devDependencies": {

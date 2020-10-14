@@ -10,9 +10,9 @@ const JobList = {
   [job02.name]: job02,
 };
 
-(async () => {
-  const workers = workerFarm(require.resolve("./child"));
-  try {
+const workers = workerFarm(require.resolve("./child"));
+try {
+  simulations &&
     simulations.forEach(async (simulation) => {
       workers(simulation.jobName, async (err, id) => {
         if (err) throw err; // Worker error
@@ -29,10 +29,9 @@ const JobList = {
         }
       });
     });
-  } catch (err) {
-    console.error(err);
-  } finally {
-    // shutdown worker pool
-    workerFarm.end(workers);
-  }
-})();
+} catch (err) {
+  console.error(err);
+} finally {
+  // shutdown worker pool
+  workerFarm.end(workers);
+}

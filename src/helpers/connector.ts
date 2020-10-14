@@ -1,5 +1,4 @@
 import { ethers } from "ethers";
-import Web3 from "web3";
 import ganache from "ganache-cli";
 import { ConfigConnector } from "../types/commons";
 
@@ -8,12 +7,15 @@ const URL_NODE = process.env.ALCHEMY_NODE;
 class Connector {
   readonly config: ConfigConnector;
   private provider: ethers.providers.Web3Provider;
+
   constructor(config: ConfigConnector) {
     this.config = config;
   }
+
   public addUnlockAccounts(unlock: string[]) {
     this.config.unlockAccounts = [...this.config.unlockAccounts, ...unlock];
   }
+
   public connect(): ethers.providers.Web3Provider {
     const web3Prov = ganache.provider({
       fork: URL_NODE,

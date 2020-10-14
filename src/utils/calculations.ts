@@ -13,7 +13,7 @@ export const caculateNewBorrorHFToOneDotOne = (
   priceCoin: ethers.BigNumber
 ): ethers.BigNumber => {
   // I don't use the library ethers.BigNumber because I found a
-  // error with the operator mul that doesn't work correct.
+  // error with the operator mul.
 
   // Transform in bignumber.js
   const totalBorrowsEthBN = parseBN(data.totalBorrowsEth);

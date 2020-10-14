@@ -20,37 +20,37 @@ class Job02 extends Job {
 
     // Factory ADAI from Owner
     const aDAIContract: AToken = ATokenFactory.connect(aTokens.DAI, signer01);
-    // GET addresses
+    // Get addresses
     const addressSigner01 = await signer01.getAddress();
     const addressSigner02 = await signer02.getAddress();
-    // GET BALANCE USER 01
+    // Get balance 01
     const balanceBefore01 = await aDAIContract.balanceOf(addressSigner01);
-    // Transfer
+    // Transfer aDAI tokens to user02
     await aDAIContract.transfer(addressSigner02, balanceBefore01);
 
     const aDAIContractUser02: AToken = ATokenFactory.connect(
       aTokens.DAI,
       signer02
     );
-    // GET BALANCE USER 02
+    // Get balance user02
     const balanceAfter02 = await aDAIContract.balanceOf(addressSigner02);
-    // REDEM
+    // Redem coins
     await aDAIContractUser02.redeem(balanceAfter02);
 
     const USDCContractu01: Erc20 = Erc20Factory.connect(Tokens.USDC, signer01);
     const usdcAmount = await USDCContractu01.balanceOf(addressSigner01);
-    // console.log("USDC ---> ", usdcAmount.toString());
+
     await USDCContractu01.transfer(addressSigner02, usdcAmount);
 
     const DAIContractu02: Erc20 = Erc20Factory.connect(Tokens.DAI, signer02);
     const balance = await DAIContractu02.balanceOf(addressSigner02);
 
-    // DEPOSIT AGAIN
+    // Second deposit
     const lpContractu02: LendingPool = await LendingPoolFactory.connect(
       AaveContracts.LendingPool, // LENDING POOL
       signer02
     );
-    // APPROVE FOR DAI
+    // Approve DAI
     await DAIContractu02.approve(
       AaveContracts.LendingPoolCore,
       ethers.constants.MaxUint256
@@ -59,15 +59,15 @@ class Job02 extends Job {
     const interestRateMode = 1;
     const referralCode = "0";
     const useAsCollateral = true;
-    // DEPOSIT WITH THE NEW USER
+    // Deposit with the new user
     await lpContractu02.deposit(Tokens.DAI, balance, referralCode);
-    // SET RESERVE AS COLLATERAL
+    // Set reserve as collateral
     await lpContractu02.setUserUseReserveAsCollateral(
       Tokens.DAI,
       useAsCollateral
     );
 
-    // BORROW WITH OTHER STABLE COIN
+    // Borrow with other stable coin
     await lpContractu02.borrow(
       Tokens.USDC,
       1000,
