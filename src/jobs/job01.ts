@@ -89,14 +89,14 @@ class Job01 extends Job {
     const originalPriceDAI = await oracleContract.getAssetPrice(Tokens.DAI);
     const sybilSigner = provider.getSigner(AaveContracts.Sybil);
     // UPDATE THE PRICE ORACLE
-    // TODO: I don't found the contract of this oracle deployed. Thats why I use the abi to load.
+    // TODO: I don't found the contract of this oracle deployed. Thats why I use the abi to load the contract.
     const contractAaveOracle = new ethers.Contract(
       AaveContracts.AaveOracleFallback,
       abiOracle,
       sybilSigner
     );
 
-    // Bump the price and move the healt factor down 0.5
+    // Bump the price of the DAI and move the healt factor down 0.5
     await contractAaveOracle.submitProphecy(
       Tokens.DAI,
       originalPriceDAI.mul(10),
