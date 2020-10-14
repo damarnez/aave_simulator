@@ -3,11 +3,13 @@ import { User, ConfigConnector } from "../types/commons";
 import Connector from "./connector";
 
 abstract class Job {
-  readonly user: User;
-  readonly connection: Connector;
+  private readonly user: User;
+
+  private readonly connection: Connector;
+
   private hrstart: [number, number];
 
-  constructor(user: User) {
+  public constructor(user: User) {
     this.user = user;
     const config: ConfigConnector = {
       unlockAccounts: [user.address],
@@ -25,16 +27,16 @@ abstract class Job {
     return this.connection.connect();
   }
 
-  public addUnlockAccounts(unlock: string[]) {
+  public addUnlockAccounts(unlock: string[]): void {
     this.connection.addUnlockAccounts(unlock);
   }
 
-  protected startLog() {
+  protected startLog(): void {
     this.hrstart = process.hrtime();
     console.info(`- Start ${this.user.jobName} user : ${this.user.address}`);
   }
 
-  protected endLog() {
+  protected endLog(): void {
     const hrend = process.hrtime(this.hrstart);
     console.info(
       `- End ${this.user.jobName} user : ${this.user.address} Execution time (hr): %ds %dms`,

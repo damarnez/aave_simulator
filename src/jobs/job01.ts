@@ -1,4 +1,4 @@
-import { ethers, Wallet, providers } from "ethers";
+import { ethers } from "ethers";
 
 import { LendingPoolFactory } from "../types/LendingPoolFactory";
 import { LendingPool } from "../types/LendingPool";
@@ -35,7 +35,7 @@ class Job01 extends Job {
     const addressSigner01 = await signer01.getAddress();
     const addressSigner02 = await signer02.getAddress();
 
-    //************** DEBUG *********/
+    /************** DEBUG *********/
 
     // This is the liquidator (my new friend) user and need to have DAI and ETH because
     // ganache don't allow transfer from the generated accounts ETH to the
@@ -55,11 +55,11 @@ class Job01 extends Job {
     );
 
     const userData = await lpContractu01.getUserAccountData(addressSigner01);
-    //************** DEBUG *********/
+    /************** DEBUG *********/
     printBigNumers("PREV HF : ", userData.healthFactor);
     printBigNumers("totalBorrowsETH ", userData.totalBorrowsETH);
 
-    //************************/
+    /************************/
 
     // Get Address ORACLE
     const LendingPollAddress: LendingPoolAddressesProvider = LendingPoolAddressesProviderFactory.connect(
@@ -96,14 +96,14 @@ class Job01 extends Job {
       referralCode
     );
 
-    //************** DEBUG *********/
+    /******* DEBUG *********/
     // Check the updated HF
     const userDataUpdated = await lpContractu01.getUserAccountData(
       addressSigner01
     );
     printBigNumers("After add a borrow HF : ", userDataUpdated.healthFactor);
     printBigNumers("totalBorrowsETH ", userDataUpdated.totalBorrowsETH);
-    //*****************************/
+    /*****************************/
 
     // Force oracle check the price in aave oracle
     oracleContract.setAssetSources(
@@ -127,7 +127,7 @@ class Job01 extends Job {
       originalPriceDAI.mul(10)
     );
 
-    //************** DEBUG *********/
+    /************** DEBUG *********/
     // Check the updated HF
     const userDataPriceDown = await lpContractu01.getUserAccountData(
       addressSigner01
@@ -138,7 +138,7 @@ class Job01 extends Job {
     );
 
     printBigNumers("Total liquidity : ", userDataPriceDown.totalLiquidityETH);
-    //*************************/
+    /*************************/
 
     // Liquidate user 01 with user 02
     const coinContract: Erc20 = Erc20Factory.connect(Tokens.DAI, signer02);

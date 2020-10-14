@@ -5,14 +5,15 @@ import { ConfigConnector } from "../types/commons";
 const URL_NODE = process.env.ALCHEMY_NODE;
 
 class Connector {
-  readonly config: ConfigConnector;
+  private readonly config: ConfigConnector;
+
   private provider: ethers.providers.Web3Provider;
 
-  constructor(config: ConfigConnector) {
+  public constructor(config: ConfigConnector) {
     this.config = config;
   }
 
-  public addUnlockAccounts(unlock: string[]) {
+  public addUnlockAccounts(unlock: string[]): void {
     this.config.unlockAccounts = [...this.config.unlockAccounts, ...unlock];
   }
 
