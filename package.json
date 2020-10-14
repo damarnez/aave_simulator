@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc && npm run clean && node dist/index.js",
-    "clean": "rm -rf ./db/*"
+    "build": "tsc --resolveJsonModule",
+    "start": "npm run clean && npm run build && env-cmd --no-override .env node dist/index.js",
+    "clean": "rm -rf ./db/* && rm -rf ./dist"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,10 @@
   "homepage": "https://gitlab.com/damarnez/aave_simulation#readme",
   "dependencies": {
     "ethers": "^5.0.17",
-    "ganache-cli": "^6.12.0"
+    "ganache-cli": "^6.12.0",
+    "microjob": "^0.7.0",
+    "worker-farm": "^1.7.0",
+    "env-cmd": "^8.0.2"
   },
   "devDependencies": {
     "tslint": "^5.12.1",
