@@ -9,10 +9,6 @@ import { aTokens, Tokens, AaveContracts } from "../utils/constants";
 
 import Job from "../helpers/job";
 
-const wait = () =>
-  new Promise((resolve) => {
-    setTimeout(resolve, 3000);
-  });
 class Job02 extends Job {
   public async exec(): Promise<void> {
     super.startLog();
