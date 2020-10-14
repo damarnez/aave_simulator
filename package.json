@@ -1,5 +1,5 @@
 {
-  "name": "aave_simulation",
+  "name": "aave_simulator",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -24,6 +24,7 @@
     "ethers": "^5.0.17",
     "ganache-cli": "^6.12.0",
     "microjob": "^0.7.0",
+    "web3": "^1.3.0",
     "worker-farm": "^1.7.0"
   },
   "devDependencies": {

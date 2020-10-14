@@ -5,13 +5,13 @@
     "address": "0x3e20adca659b69b84591b701f6951f192943d4c3",
     "tx": "0x00019bafff3fc4f49dd30e7b16390caa7e11136fb3ddbbce6004aa3685f4d057",
     "disabled": false,
-    "extra": ["0x0056d1fd2ca3c0f3a7b6ed6cdd1f1f104b4bf9a9"]
+    "extra": ["0x75116bd1ab4b0065b44e1a4ea9b4180a171406ed"]
   },
   {
     "jobName": "Job02",
     "blockNumber": 9248349,
     "address": "0x0056d1fd2ca3c0f3a7b6ed6cdd1f1f104b4bf9a9",
     "tx": "0x0000a02606452be0fa888746dbca1127bc71c881f2cceac66c1dd83ea36eb47c",
-    "disabled": true
+    "disabled": false
   }
 ]

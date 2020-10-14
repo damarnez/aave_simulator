@@ -1,11 +1,13 @@
 import { ethers } from "ethers";
+import Web3 from "web3";
 import ganache from "ganache-cli";
 import { ConfigConnector } from "../types/commons";
 
 const URL_NODE = process.env.ALCHEMY_NODE;
 
 class Connector {
-  private config: ConfigConnector;
+  readonly config: ConfigConnector;
+  private provider: ethers.providers.Web3Provider;
   constructor(config: ConfigConnector) {
     this.config = config;
   }
@@ -19,12 +21,16 @@ class Connector {
       unlocked_accounts: this.config.unlockAccounts,
       db_path: `./db/${this.config.name}-${Date.now()}`,
       forkCacheSize: -1,
+      debug: true,
       locked: false,
+      vmErrorsOnRPCResponse: true,
+      allowUnlimitedContractSize: true,
       default_balance_ether: 10000000000000,
     });
-    const provider = new ethers.providers.Web3Provider(web3Prov);
 
-    return provider;
+    this.provider = new ethers.providers.Web3Provider(web3Prov);
+
+    return this.provider;
   }
 }
 

@@ -1,9 +1,12 @@
 import { ethers } from "ethers";
 
+const DEBUG = process.env.DEBUG === "true" || false;
 export const printBigNumers = (
   text: string,
   numbers: ethers.BigNumber,
   units = 18
 ) => {
-  console.log(text, ethers.utils.formatUnits(numbers, units));
+  DEBUG && console.log(text, ethers.utils.formatUnits(numbers, units));
 };
+
+export const printCoins = {};
