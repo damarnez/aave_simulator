@@ -19,11 +19,12 @@
   },
   "homepage": "https://gitlab.com/damarnez/aave_simulation#readme",
   "dependencies": {
+    "bignumber.js": "^9.0.1",
+    "env-cmd": "^8.0.2",
     "ethers": "^5.0.17",
     "ganache-cli": "^6.12.0",
     "microjob": "^0.7.0",
-    "worker-farm": "^1.7.0",
-    "env-cmd": "^8.0.2"
+    "worker-farm": "^1.7.0"
   },
   "devDependencies": {
     "tslint": "^5.12.1",

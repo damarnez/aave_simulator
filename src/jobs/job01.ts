@@ -45,24 +45,7 @@ class Job01 extends Job {
     printBigNumers("PREV HF : ", userData.healthFactor);
     //************************/
 
-    // Update health factor to 1.1
-    const interestRateMode = 1;
-    const referralCode = "0";
-    const borrowSize = caculateNewBorrorHFToOneDotOne(userData);
-    const borrow = await lpContractu01.borrow(
-      Tokens.DAI,
-      borrowSize,
-      interestRateMode,
-      referralCode
-    );
-
-    //************** DEBUG *********/
-    // Check the updated HF
-    const userDataUpdated = await lpContractu01.getUserAccountData(
-      addressSigner01
-    );
-    printBigNumers("After add a borrow HF : ", userDataUpdated.healthFactor);
-    //*****************************/
+    printBigNumers("totalBorrowsETH ", userData.totalBorrowsETH);
 
     // Get Address ORACLE
     const LendingPollAddress: LendingPoolAddressesProvider = LendingPoolAddressesProviderFactory.connect(
@@ -80,62 +63,90 @@ class Job01 extends Job {
       addressOracle,
       oracleOwnerSigner
     );
-    // Force oracle check the price in aave oracle
-    oracleContract.setAssetSources(
-      [Tokens.DAI],
-      ["0x0000000000000000000000000000000000000000"]
-    );
-    // GET PRICE DAI
     const originalPriceDAI = await oracleContract.getAssetPrice(Tokens.DAI);
-    const sybilSigner = provider.getSigner(AaveContracts.Sybil);
-    // UPDATE THE PRICE ORACLE
-    // TODO: I don't found the contract of this oracle deployed. Thats why I use the abi to load the contract.
-    const contractAaveOracle = new ethers.Contract(
-      AaveContracts.AaveOracleFallback,
-      abiOracle,
-      sybilSigner
-    );
 
-    // Bump the price of the DAI and move the healt factor down 0.5
-    await contractAaveOracle.submitProphecy(
+    // Update health factor to 1.1
+    const interestRateMode = 1;
+    const referralCode = "0";
+    const borrowSize = caculateNewBorrorHFToOneDotOne(
+      {
+        totalBorrowsEth: userData.totalBorrowsETH,
+        healthFactor: userData.healthFactor,
+      },
+      originalPriceDAI
+    );
+    await lpContractu01.borrow(
       Tokens.DAI,
-      originalPriceDAI.mul(10),
-      originalPriceDAI.mul(10)
+      borrowSize,
+      interestRateMode,
+      referralCode
     );
 
     //************** DEBUG *********/
     // Check the updated HF
-    const userDataPriceDown = await lpContractu01.getUserAccountData(
+    const userDataUpdated = await lpContractu01.getUserAccountData(
       addressSigner01
     );
-    printBigNumers(
-      "After bump the price HF : ",
-      userDataPriceDown.healthFactor
-    );
-    //*************************/
+    printBigNumers("After add a borrow HF : ", userDataUpdated.healthFactor);
+    //*****************************/
+    printBigNumers("totalBorrowsETH ", userDataUpdated.totalBorrowsETH);
 
-    // Liquidate user 01 with user 02
-    const coinContract: Erc20 = Erc20Factory.connect(Tokens.DAI, signer02);
-    await coinContract.approve(
-      AaveContracts.LendingPoolCore,
-      ethers.constants.MaxUint256
-    );
+    // // Force oracle check the price in aave oracle
+    // oracleContract.setAssetSources(
+    //   [Tokens.DAI],
+    //   ["0x0000000000000000000000000000000000000000"]
+    // );
+    // // GET PRICE DAI
 
-    const lpContractu02: LendingPool = await LendingPoolFactory.connect(
-      AaveContracts.LendingPool, // LENDING POOL
-      signer02
-    );
-    try {
-      await lpContractu02.liquidationCall(
-        Tokens.ETH,
-        Tokens.DAI,
-        addressSigner01,
-        ethers.constants.MaxUint256,
-        true
-      );
-    } catch (error) {
-      console.error("ERROR LIQUIDATION : ", error);
-    }
+    // const sybilSigner = provider.getSigner(AaveContracts.Sybil);
+    // // UPDATE THE PRICE ORACLE
+    // // TODO: I don't found the contract of this oracle deployed. Thats why I use the abi to load the contract.
+    // const contractAaveOracle = new ethers.Contract(
+    //   AaveContracts.AaveOracleFallback,
+    //   abiOracle,
+    //   sybilSigner
+    // );
+
+    // // Bump the price of the DAI and move the healt factor down 0.5
+    // await contractAaveOracle.submitProphecy(
+    //   Tokens.DAI,
+    //   originalPriceDAI.mul(10),
+    //   originalPriceDAI.mul(10)
+    // );
+
+    // //************** DEBUG *********/
+    // // Check the updated HF
+    // const userDataPriceDown = await lpContractu01.getUserAccountData(
+    //   addressSigner01
+    // );
+    // printBigNumers(
+    //   "After bump the price HF : ",
+    //   userDataPriceDown.healthFactor
+    // );
+    // //*************************/
+
+    // // Liquidate user 01 with user 02
+    // const coinContract: Erc20 = Erc20Factory.connect(Tokens.DAI, signer02);
+    // await coinContract.approve(
+    //   AaveContracts.LendingPoolCore,
+    //   ethers.constants.MaxUint256
+    // );
+
+    // const lpContractu02: LendingPool = await LendingPoolFactory.connect(
+    //   AaveContracts.LendingPool, // LENDING POOL
+    //   signer02
+    // );
+    // try {
+    //   await lpContractu02.liquidationCall(
+    //     Tokens.ETH,
+    //     Tokens.DAI,
+    //     addressSigner01,
+    //     ethers.constants.MaxUint256,
+    //     true
+    //   );
+    // } catch (error) {
+    //   console.error("ERROR LIQUIDATION : ", error);
+    // }
     super.endLog();
     return;
   }
