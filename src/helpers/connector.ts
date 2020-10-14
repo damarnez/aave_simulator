@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import ganache from "ganache-cli";
-import { ConfigConnector } from "../types/generics";
+import { ConfigConnector } from "../types/commons";
 
 const URL_NODE = process.env.ALCHEMY_NODE;
 

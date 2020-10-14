@@ -115,7 +115,7 @@ class Job01 extends Job {
     //*************************/
 
     // Liquidate user 01 with user 02
-    const coinContract: Erc20 = Erc20Factory.connect(Tokens.USDC, signer02);
+    const coinContract: Erc20 = Erc20Factory.connect(Tokens.DAI, signer02);
     await coinContract.approve(
       AaveContracts.LendingPoolCore,
       ethers.constants.MaxUint256

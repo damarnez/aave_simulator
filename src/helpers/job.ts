@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { User, ConfigConnector } from "../types/generics";
+import { User, ConfigConnector } from "../types/commons";
 import Connector from "./connector";
 
 abstract class Job {
