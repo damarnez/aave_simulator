@@ -27,7 +27,7 @@
 .env
 
 ```
-  ALCHEMY_NODE=https://eth-mainnet.alchemyapi.io/v2/k1Q5U-oo9EbEVTFTTQBNJRJZ86suQuO9
+  ALCHEMY_NODE=https://eth-mainnet.alchemyapi.io/v2/ YOUR KEY
   DEBUG=false
 ```
 
