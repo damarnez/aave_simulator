@@ -40,3 +40,7 @@
 ### Exclude Jobs
 
 Update the file simulations.json and set to `true` the value disabled.
+
+### System's architecture
+
+![architecture](/.statics/diagram.png)
