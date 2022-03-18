@@ -3,7 +3,7 @@
 ## JOB01
 
 - Select an active borrower on the protocol at the selected block height (with some collateral and borrowings).
-- Borrow another currency apart from the ones he is borrowing at the moment, moving his HF to exactly 1.1.
+- Borrow another currency apart from the ones he is borrowing at the moment, moving his [health factor](https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor) to exactly 1.1.
 - "Force" the price oracle of AAVE to set a price that puts the previous borrower under liquidation.
 - With a different account, liquidate the user.
 - There is freedom to select the new borrowed currency.
